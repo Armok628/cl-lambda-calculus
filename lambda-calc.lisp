@@ -31,10 +31,10 @@
 
 (defun full-reduction (redex &optional (print-steps nil) (hist nil))
   (cond ((equal redex (car hist))
-	 (when print-steps (format t "~{~A~%~%~}" (reverse (cdr hist))))
+	 (when print-steps (format t "~{~A~%~%~}" (reverse hist)))
 	 (values redex 'FINAL))
 	((member redex (cdr hist) :test #'equal)
-	 (when print-steps (format t "~{~A~%~%~}" (reverse (cdr hist))))
+	 (when print-steps (format t "~{~A~%~%~}" (reverse hist)))
 	 (values redex 'CYCLIC))
 	(t (full-reduction (beta-reduce redex)
 			   print-steps
