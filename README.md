@@ -15,6 +15,8 @@ which can be reduced as follows by successive applications of `beta-reduce`:
 
 `((((L (#:G390) (L (X Y) Y)) (L (X Y) X)) (L (X Y) Y)) (L (X Y) X))`
 
+(Symbols that look like `#:G390` above are created by `(gensym)` for use in α-conversion)
+
 `(((L (X Y) Y) (L (X Y) Y)) (L (X Y) X))`
 
 `((L (#:G402) #:G402) (L (X Y) X))`
