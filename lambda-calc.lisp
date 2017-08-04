@@ -29,4 +29,13 @@
 	 (l-apply (car redex) (mapcar #'beta-reduce (cdr redex))))
 	(t (mapcar #'beta-reduce redex))))
 
-(defun times (n f v) (if (zerop n) v (times (1- n) f (funcall f v))))
+(defun full-reduction (redex &optional (print-steps nil) (hist nil))
+  (cond ((equal redex (car hist))
+	 (when print-steps (format t "~{~A~%~%~}" hist))
+	 (values redex 'FINAL))
+	((member redex (cdr hist) :test #'equal)
+	 (when print-steps (format t "~{~A~%~%~}" hist))
+	 (values redex 'CYCLIC))
+	(t (full-reduction (beta-reduce redex)
+			   print-steps
+			   `(,redex ,@hist)))))
