@@ -1,9 +1,13 @@
 (defvar K '(L (X Y) X))
 (defvar S '(L (X Y Z) ((X Z) (Y Z))))
 (defvar Y '(L (F) ((L (X) (F (X X))) (L (X) (F (X X)))))); Untested
-(defvar true '(L (X Y) X))
-(defvar false '(L (X Y) Y))
-(defvar lnot `(L (C) ((C ,false) ,true)))
+(defvar ltrue '(L (X Y) X))
+(defvar lfalse '(L (X Y) Y))
+(defvar lnot `(L (C) ((C ,lfalse) ,ltrue)))
+(defvar lor `(L (X Y) ((X ,ltrue) Y)))
+(defvar lif `(L (A B C) ((A B) C)))
+(defvar ladd `(L (A B) (A F (B F X))))
+(defvar lmult `(L (A B) (A (B F) X)))
 
 (defun subst-assoc (l env)
   (cond ((listp l) (mapcar (lambda (x) (subst-assoc x env)) l))
@@ -29,6 +33,12 @@
 	((eq (caar redex) 'l)
 	 (l-apply (car redex) (mapcar #'beta-reduce (cdr redex))))
 	(t (mapcar #'beta-reduce redex))))
+
+(defun church-numeral (n &key (init nil))
+  (declare (type fixnum n))
+  (cond ((not init) (list 'L '(F X) (church-numeral n :init t)))
+	((zerop n) 'X)
+	(t (list 'F (church-numeral (1- n) :init t)))))
 
 (defun full-reduction (redex &optional (print-steps nil) (hist nil))
   (cond ((equal redex (car hist))
