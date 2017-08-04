@@ -25,6 +25,7 @@
 (defun beta-reduce (redex)
   (cond ((atom redex) redex)
 	((eq (car redex) 'l) redex)
+	((atom (car redex)) redex)
 	((eq (caar redex) 'l)
 	 (l-apply (car redex) (mapcar #'beta-reduce (cdr redex))))
 	(t (mapcar #'beta-reduce redex))))
